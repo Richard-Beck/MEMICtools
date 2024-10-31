@@ -18,13 +18,14 @@ LoG_transform <- function(filename,inpath,outpath){
 
 indir <- args[1]
 outdir <- args[2]
+ncores <- args[3]
 
 
 library(parallel)
 library(magick)
 ff <- list.files(indir)
 ff <- ff[order(ff)]
-cl <- makeCluster(getOption("cl.cores", 2))
+cl <- makeCluster(getOption("cl.cores", ncores))
 clusterEvalQ(cl,{
   Sys.setenv(MAGICK_THREAD_LIMIT = "1")
   library(magick)
