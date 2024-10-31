@@ -1,18 +1,21 @@
 
 LoG_transform <- function(filename,inpath,outpath){
-  inpath <- paste0(inpath,filename)
-  outpath <- paste0(outpath,filename)
-  xi <- image_read(inpath)
-  xi <- image_resize(xi,geometry_size_percent(50),filter = "Gaussian")
-  xi <- image_convolve(image=xi,kernel="Laplacian")
-  
-  xi <- image_resize(xi,geometry_size_percent(50),filter = "Gaussian")
-  xi <- image_resize(xi,geometry_size_percent(50),filter = "Gaussian")
-  xi <- image_median(image=xi,radius=10)
-  image_write(xi,outpath)
-  image_destroy(xi)
-  gc()
-  return(0)
+  result <- tryCatch({
+    inpath <- paste0(inpath,filename)
+    outpath <- paste0(outpath,filename)
+    xi <- image_read(inpath)
+    xi <- image_resize(xi,geometry_size_percent(50),filter = "Gaussian")
+    xi <- image_convolve(image=xi,kernel="Laplacian")
+    
+    xi <- image_resize(xi,geometry_size_percent(50),filter = "Gaussian")
+    xi <- image_resize(xi,geometry_size_percent(50),filter = "Gaussian")
+    xi <- image_median(image=xi,radius=10)
+    image_write(xi,outpath)
+    image_destroy(xi)
+    gc()
+    result <- 0
+  },error = function(e) return(1))
+  return(result)
 }
 
 args <- commandArgs(trailingOnly = TRUE)
