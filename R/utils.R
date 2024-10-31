@@ -1,5 +1,5 @@
 
-library(string)
+library(stringr)
 
 extract_fileids <- function(fi){
   matches <- str_match_all(input_string, "([a-z]+)(\\d+)")[[1]]
