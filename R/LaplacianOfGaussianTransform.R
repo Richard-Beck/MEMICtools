@@ -15,7 +15,7 @@ LoG_transform <- function(filename,inpath,outpath){
   return(0)
 }
 
-
+args <- commandArgs(trailingOnly = TRUE)
 indir <- args[1]
 outdir <- args[2]
 ncores <- args[3]
