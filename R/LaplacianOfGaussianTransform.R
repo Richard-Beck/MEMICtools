@@ -34,7 +34,7 @@ clusterEvalQ(cl,{
   library(magick)
 })
 print(paste("established cluster with",ncores,"cores"))
-pbapply::pblapply(X = ff,fun=LoG_transform,inpath=inpath,outpath=outpath,cl=cl)
+pbapply::pblapply(X = ff,FUN=LoG_transform,inpath=inpath,outpath=outpath,cl=cl)
 
 
 
