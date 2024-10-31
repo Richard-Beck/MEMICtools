@@ -1,7 +1,7 @@
 
 library(stringr)
 
-extract_fileids <- function(fi){
+extract_fileids <- function(input_string){
   matches <- str_match_all(input_string, "([a-z]+)(\\d+)")[[1]]
   
   # Extract the names (prefixes) and numbers
