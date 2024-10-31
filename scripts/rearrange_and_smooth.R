@@ -27,7 +27,7 @@ lapply(x,function(xi){
     abind(ims,along=2)
   })
   im <- abind(rows,along=1)
-  writeTIFF(im,paste0(outpath,nm))
+  writeTIFF(im,paste0(outpath,nm),bits.per.sample = 16)
 })
 
 
