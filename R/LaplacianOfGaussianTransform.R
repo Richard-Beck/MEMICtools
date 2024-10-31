@@ -16,14 +16,14 @@ LoG_transform <- function(filename,inpath,outpath){
 }
 
 args <- commandArgs(trailingOnly = TRUE)
-indir <- args[1]
-outdir <- args[2]
+inpath <- args[1]
+outpath <- args[2]
 ncores <- args[3]
 
 
 library(parallel)
-library(magick)
-ff <- list.files(indir)
+
+ff <- list.files(inpath)
 ff <- ff[order(ff)]
 cl <- makeCluster(getOption("cl.cores", ncores))
 clusterEvalQ(cl,{
