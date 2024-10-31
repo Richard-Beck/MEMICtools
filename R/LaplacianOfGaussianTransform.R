@@ -22,16 +22,16 @@ ncores <- args[3]
 
 
 library(parallel)
-
 ff <- list.files(inpath)
 ff <- ff[order(ff)]
+print(paste("found",length(ff),"files in",inpath))
 cl <- makeCluster(getOption("cl.cores", ncores))
 clusterEvalQ(cl,{
   Sys.setenv(MAGICK_THREAD_LIMIT = "1")
   library(magick)
 })
-parLapplyLB(cl,X = ff,fun=LoG_transform,inpath=inpath,outpath=outpath)
-
+print(paste("established cluster with",ncores,"cores"))
+pbapply::pblapply(X = ff,fun=LoG_transform,inpath=inpath,outpath=outpath,cl=cl)
 
 
 
