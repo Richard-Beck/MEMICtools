@@ -1,7 +1,7 @@
 
 LoG_transform <- function(filename,inpath,outpath){
   inpath <- paste0(inpath,filename)
-  outpath <- paste0(inpath,filename)
+  outpath <- paste0(outpath,filename)
   xi <- image_read(inpath)
   xi <- image_resize(xi,geometry_size_percent(50),filter = "Gaussian")
   xi <- image_convolve(image=xi,kernel="Laplacian")
@@ -27,7 +27,7 @@ ff <- ff[order(ff)]
 print(paste("found",length(ff),"files in",inpath))
 cl <- makeCluster(getOption("cl.cores", ncores))
 clusterEvalQ(cl,{
-  Sys.setenv(MAGICK_THREAD_LIMIT = "1")
+  Sys.setenv(MAGICK_THREAD_LIMIT = "4")
   library(magick)
 })
 print(paste("established cluster with",ncores,"cores"))
