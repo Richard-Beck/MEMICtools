@@ -20,7 +20,7 @@ organize_filenames <- function(ff){
 }
 
 compile_files <- function(ff,compile_on){
-  df <- organize_filenames(ff)
+  df <- data.frame(organize_filenames(ff))
   compile_on <- unlist(strsplit(compile_on,split="_"))
   splitting_factors <- lapply(compile_on,function(ci) df[,ci])
   split(df,splitting_factors,drop=T)
