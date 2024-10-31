@@ -19,6 +19,12 @@ organize_filenames <- function(ff){
   return(df)
 }
 
+compile_files <- function(ff,compile_on){
+  df <- organize_filenames(ff)
+  compile_on <- unlist(strsplit(compile_on,split="_"))
+  splitting_factors <- lapply(compile_on,function(ci) df[,ci])
+  split(df,splitting_factors,drop=T)
+}
 
 
 
