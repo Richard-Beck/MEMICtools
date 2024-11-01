@@ -9,6 +9,8 @@ proc <- function(mi){
   library(tiff)
   library(abind)
   
+  gc()
+  
   nm <- mi[1,apply(mi,2,function(xij) length(unique(xij))==1)]
   nm <- paste0(paste0(colnames(nm),nm[1,],sep=""),collapse="")
   
@@ -32,13 +34,15 @@ proc <- function(mi){
   map <- apply(map,c(1,2),which.max)
   writeTIFF(map/max(map),paste0(mappath,nm,".tiff"))
   
-  y1 <- flatten(Ai1,map)
-  y2 <- flatten(Ai2,map)
+  Ai1 <- flatten(Ai1,map)
+  Ai2 <- flatten(Ai2,map)
   
-  a <- array(c(y1,y2),dim = c(nrow(y1), ncol(y2), 2))
+  a <- array(c(Ai1,Ai2),dim = c(nrow(y1), ncol(y2), 2))
+  Ai1 <- 0
+  Ai2 <- 0
+  gc()
   writeTIFF(a,paste0(outpath,nm,".tiff"), bits.per.sample = 16)
-  writeTIFF(a,"/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/tst_pipe.tiff", bits.per.sample = 16)
-  
+
   return(0)
 }
 
