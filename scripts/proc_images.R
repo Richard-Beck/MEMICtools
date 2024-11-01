@@ -37,7 +37,7 @@ proc <- function(mi){
   Ai1 <- flatten(Ai1,map)
   Ai2 <- flatten(Ai2,map)
   
-  a <- array(c(Ai1,Ai2),dim = c(nrow(y1), ncol(y2), 2))
+  a <- array(c(Ai1,Ai2),dim = c(nrow(Ai1), ncol(Ai2), 2))
   Ai1 <- 0
   Ai2 <- 0
   gc()
