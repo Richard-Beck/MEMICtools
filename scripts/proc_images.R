@@ -52,7 +52,7 @@ source("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/MEMICtool
 
 ff <- list.files(im_dir)
 m <- compile_files(ff,compile_on="r_c_sk")
-cl <- makeCluster(getOption("cl.cores", 10))
+cl <- makeCluster(getOption("cl.cores", 8))
 pbapply::pblapply(X = m,FUN=proc,cl=cl)
 
 
