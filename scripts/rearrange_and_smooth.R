@@ -10,13 +10,13 @@ compile_on <- "r_c_p_sk"
 x <- compile_files(ff,compile_on)
 
 field_map <- rbind(2:10,19:11,c(20:23,1,24:27),36:28,37:45)
-
+print(paste("detected",length(x),"images"))
 x <- x[sapply(x,nrow)==length(field_map)]
-
+print(paste("detected",length(x),"complete images..."))
 library(tiff)
 library(abind)
 
-lapply(x,function(xi){
+pbapply::pblapply(x,function(xi){
   nm <- xi[1,apply(xi,2,function(xij) length(unique(xij))==1)]
   nm <- paste0(c(paste0(colnames(nm),nm[1,],sep=""),".tiff"),collapse="")
   print(nm)

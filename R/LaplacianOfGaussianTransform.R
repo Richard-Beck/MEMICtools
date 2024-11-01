@@ -18,14 +18,19 @@ LoG_transform <- function(filename,inpath,outpath){
   return(result)
 }
 
-args <- commandArgs(trailingOnly = TRUE)
-inpath <- args[1]
-outpath <- args[2]
-ncores <- args[3]
+#args <- commandArgs(trailingOnly = TRUE)
+#inpath <- args[1]
+#outpath <- args[2]
+#ncores <- args[3]
 
+inpath <- "raw_images/"
+outpath <- "LoG_Transforms/"
+ncores <- 25
 
 library(parallel)
 ff <- list.files(inpath)
+fdone <- list.files(outpath)
+ff <- ff[!ff%in%fdone]
 ff <- ff[order(ff)]
 print(paste("found",length(ff),"files in",inpath))
 cl <- makeCluster(getOption("cl.cores", ncores))

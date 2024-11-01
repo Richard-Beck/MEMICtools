@@ -30,12 +30,13 @@ fft_smooth <- function(large_matrix){
 }
 
 ff <- list.files(inpath)
-lapply(ff,function(fi){
+pbapply::pblapply(ff,function(fi){
   x <- readTIFF(paste0(inpath,fi),all=T)
   x <- lapply(x,fft_smooth)
   y <- abind(x,along=3)
   y <- apply(y,c(1,2),which.max)
-  writeTIFF(y,paste0(outpath,fi))
+  fi <- gsub(".tiff",".Rds",fi)
+  saveRDS(y,paste0(outpath,fi))
   return(0)
 })
 
