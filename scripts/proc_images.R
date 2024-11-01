@@ -30,7 +30,7 @@ proc <- function(mi){
   map <- assemble_from_list(maps,field_map,mi2)
   map <- abind(map,along=3)
   map <- apply(map,c(1,2),which.max)
-  writeTIFF(map/max(map),paste0(mappath,nm,".Rds"))
+  writeTIFF(map/max(map),paste0(mappath,nm,".tiff"))
   
   y1 <- flatten(Ai1,map)
   y2 <- flatten(Ai2,map)
