@@ -42,6 +42,7 @@ proc <- function(mi){
   return(0)
 }
 
+library(parallel)
 im_dir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/raw_images/"
 source("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/MEMICtools/R/utils.R")
 
