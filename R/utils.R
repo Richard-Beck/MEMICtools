@@ -38,7 +38,7 @@ flatten <- function(A,map){
   j_map <- c(matrix(lut(1:ncol(A), ncol(A)/ncol(map)), nrow = nrow(A), ncol = ncol(A), byrow = TRUE))
   
   # Extract slices from 'map' using vectorized indexing
-  k_A <- map[i_map,j_map]
+  k_A <- map[cbind(i_map,j_map)]
   
   # Generate indices for extracting elements from 'A'
   i_A <- c(matrix(1:nrow(A), nrow = nrow(A), ncol = ncol(A), byrow = FALSE))
@@ -46,7 +46,7 @@ flatten <- function(A,map){
   
   
   # Reshape the result into a matrix
-  y <- matrix(A[cbind(i_A, j_A,k_A)], nrow = nrow(ch2), ncol = ncol(ch2))
+  y <- matrix(A[cbind(i_A, j_A,k_A)], nrow = nrow(A), ncol = ncol(A))
   return(y)
 }
 
