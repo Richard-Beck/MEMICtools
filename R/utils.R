@@ -3,6 +3,8 @@ library(stringr)
 library(tiff)
 library(abind)
 
+
+
 extract_fileids <- function(input_string){
   matches <- str_match_all(input_string, "([a-z]+)(\\d+)")[[1]]
   
@@ -27,7 +29,7 @@ compile_files <- function(ff,compile_on){
   splitting_factors <- lapply(compile_on,function(ci) df[,ci])
   split(df,splitting_factors,drop=T)
 }
-
+lut <- function(coord,sf) ceiling(coord/sf)
 flatten <- function(A,map){
   ##takes a 3d Image (A) and a 2D map.
   ##2d map contains indices for the 3d dimension of A
