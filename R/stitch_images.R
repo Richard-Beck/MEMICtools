@@ -9,6 +9,9 @@ ncores <- 20
 cl <- makeCluster(getOption("cl.cores", ncores))
 
 parLapplyLB(cl=cl,X=x,fun=function(xi){
+  library(tiff)
+  library(abind)
+  library(parallel)
   map_dir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/sliceMaps2/"
   outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/flattenedImages2/"
   tryCatch({
