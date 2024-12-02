@@ -3,7 +3,7 @@ library(xml2)
 library(dplyr)
 
 # Load the XML file
-xml_file <- read_xml("~/../Downloads/Index.xml")
+xml_file <- read_xml("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/Images/Index.xml")
 ns <- xml_ns(xml_file)
 
 # Navigate to the `Images` node
@@ -35,4 +35,4 @@ image_data <- pbapply::pblapply(images, function(image) {
 
 image_data <- do.call(rbind,image_data)
 
-saveRDS(image_data,"~/projects/017_jax/MEMICtools/data/metadata.Rds")
+saveRDS(image_data,"/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/Images/metadata.Rds")
