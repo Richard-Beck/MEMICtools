@@ -1,44 +1,61 @@
 x <- readRDS("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/Images/metadata.Rds")
 #x <- readRDS("~/projects/017_jax/MEMICtools/data/metadata.Rds")
-library(tiff)
-library(abind)
+
 library(parallel)
+
+x <- x[x$Plane==1,]
+x <- split(x,f=interaction(x$Row,x$Col,x$Timepoint))
+
 
 x <- split(x,f=interaction(x$Row,x$Col,x$Channel,x$Timepoint,x$Field))
 ncores <- 20
 cl <- makeCluster(getOption("cl.cores", ncores))
 
+dir.create("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalImages/")
+
 parLapplyLB(cl=cl,X=x,fun=function(xi){
   library(tiff)
   library(abind)
-  library(parallel)
-  map_dir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/sliceMaps2/"
-  outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/flattenedImages2/"
-  tryCatch({
-    xi <- xi[order(xi$Plane),]
-    
-    ims <- lapply(xi$URL,function(imname){
-      readTIFF(paste0("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/raw_images/",imname))
+  flattenedDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/flattenedImages2/"
+  outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalImages/"
+  
+  nxy <- 2160
+  empty_image <- matrix(0,nxy,nxy)
+  ff <- list.files(flattenedDir)
+  xi <- xi[order(xi$PositionX,xi$PositionY),]
+  c1 <- xi[xi$Channel==1,]
+  c1 <- split(c1,f=c1$PositionX)
+  
+  c1 <- lapply(c1,function(ci){
+    c1Col <- lapply(ci$URL,function(path){
+      mapname <- paste0(substr(path,1,9),substr(path,13,nchar(path)))
+      if(mapname%in%ff) return(readTIFF(paste0(flattenedDir,mapname)))
+      return(empty_image)
     })
-    ims <- abind(ims,along=3)
-    
-    mapname <- xi$URL[1]
-    saveAs <- paste0(substr(mapname,1,9),substr(mapname,13,nchar(mapname)))
-    mapname <- gsub(".tiff",".Rds",mapname)
-    mapname <- paste0(substr(mapname,1,6),substr(mapname,13,nchar(mapname)))
-    maps <- list.files(map_dir)
-    mapsMod <- gsub("fxxpxx","",maps)
-    mapID <- maps[mapsMod==mapname]
-    map <- readRDS(paste0(map_dir,mapID))
-    
-    lut <- function(coord,sf) ceiling(coord/sf)
-    y1 <- do.call(rbind,pbapply::pblapply(1:nrow(ims),function(j){
-      il <- lut(j,nrow(ims)/nrow(map))
-      k <- 1:ncol(ims)
-      l <- map[il,lut(k,nrow(ims)/nrow(map))]
-      sapply(1:length(l),function(xx) ims[j,k[xx],l[xx]])
-    }))
-    writeTIFF(y1,paste0(outDir,saveAs))
-  },error=function(e) print(xi$URL[1]))
+    abind(c1Col,along=2)
+  })
+  c1=abind(c1,along=2)
+  
+  c2 <- xi[xi$Channel==1,]
+  c2 <- split(c2,f=c2$PositionX)
+  
+  c2 <- lapply(c2,function(ci){
+    c2Col <- lapply(ci$URL,function(path){
+      mapname <- paste0(substr(path,1,9),substr(path,13,nchar(path)))
+      if(mapname%in%ff) return(readTIFF(paste0(flattenedDir,mapname)))
+      return(empty_image)
+    })
+    abind(c2Col,along=2)
+  })
+  c2=abind(c2,along=2)
+  
+  a <- array(c(c1,c2),dim = c(nrow(c1), ncol(c2), 2))
+  
+  id <- paste0("r",stringr::str_pad(xi$Row[1],2,pad=0),
+               "c",stringr::str_pad(xi$Col[1],2,pad=0),
+               "t",stringr::str_pad(xi$Timepoint[1],2,pad=0),
+               ".tiff")
+  
+  writeTIFF(a, paste0(outDir,id,".tiff"), bits.per.sample = 16)
   
 })

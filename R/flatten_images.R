@@ -38,7 +38,7 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
       l <- map[il,lut(k,nrow(ims)/nrow(map))]
       sapply(1:length(l),function(xx) ims[j,k[xx],l[xx]])
     }))
-    writeTIFF(y1,paste0(outDir,saveAs))
+    writeTIFF(y1,paste0(outDir,saveAs), bits.per.sample = 16)
   },error=function(e) print(xi$URL[1]))
   
 })
