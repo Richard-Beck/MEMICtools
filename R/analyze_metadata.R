@@ -37,7 +37,7 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
       yi$Plane[which.min(abs(z-yi$AbsPositionZ))]
     })
     
-    m <- reshape2::acast(im,PositionX~-PositionY,value.var = "plane")/max(yi$Plane)
+    m <- reshape2::acast(im,PositionX~-PositionY,value.var = "plane")
     
     saveRDS(m,paste0("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/sliceMaps2/",gsub(".tiff",".Rds",id)))
     return(0)
