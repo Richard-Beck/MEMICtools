@@ -16,7 +16,6 @@ lapply(x,function(xi){
   
   fit <- lm(AbsPositionZ~PositionX+PositionY,data=xi)
   y <- split(xi,f=xi$Field)
-  y <- split(x,f=x$Field)
   
   yi <- y[[1]]
   x0 <- yi$PositionX[1]
