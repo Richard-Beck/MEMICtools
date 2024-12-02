@@ -5,7 +5,7 @@ library(abind)
 library(parallel)
 
 x <- split(x,f=interaction(x$Row,x$Col,x$Channel,x$Timepoint,x$Field))
-ncores <- 20
+ncores <- 40
 cl <- makeCluster(getOption("cl.cores", ncores))
 
 parLapplyLB(cl=cl,X=x,fun=function(xi){
