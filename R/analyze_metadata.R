@@ -1,12 +1,16 @@
 x <- readRDS("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/Images/metadata.Rds")
 library(tiff)
-dxy <- 0.001217608
-nxy <- 2160
+library(parallel)
+
+ncores <- 40
 
 x <- split(x,f=interaction(x$Row,x$Col,x$Channel,x$Timepoint))
 
-lapply(x,function(xi){
-  
+cl <- makeCluster(getOption("cl.cores", ncores))
+
+parLapplyLB(cl=cl,X=x,fun=function(xi){
+  dxy <- 0.001217608
+  nxy <- 2160  
   id <- paste0("r",stringr::str_pad(xi$Row[1],2,pad=0),
                "c",stringr::str_pad(xi$Col[1],2,pad=0),
                "fxxpxx-",
@@ -34,6 +38,6 @@ lapply(x,function(xi){
   
   m <- reshape2::acast(im,PositionX~-PositionY,value.var = "plane")/max(yi$Plane)
   
-  writeTIFF(m,paste0("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/sliceMaps2/",id))
-  
+  saveRDS(m,paste0("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/sliceMaps2/",gsub(".tiff",".Rds",id)))
+  return(0)
 })
