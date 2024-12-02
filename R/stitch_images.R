@@ -2,11 +2,15 @@ x <- readRDS("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/Ima
 #x <- readRDS("~/projects/017_jax/MEMICtools/data/metadata.Rds")
 library(tiff)
 library(abind)
-map_dir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/sliceMaps2/"
-outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/flattenedImages2/"
-x <- split(x,f=interaction(x$Row,x$Col,x$Channel,x$Timepoint,x$Field))
+library(parallel)
 
-lapply(x,function(xi){
+x <- split(x,f=interaction(x$Row,x$Col,x$Channel,x$Timepoint,x$Field))
+ncores <- 20
+cl <- makeCluster(getOption("cl.cores", ncores))
+
+parLapplyLB(cl=cl,X=x,fun=function(xi){
+  map_dir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/sliceMaps2/"
+  outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/flattenedImages2/"
   tryCatch({
     xi <- xi[order(xi$Plane),]
     
