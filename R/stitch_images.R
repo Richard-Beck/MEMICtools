@@ -55,7 +55,7 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
                  "t",stringr::str_pad(xi$Timepoint[1],2,pad=0),
                  ".tiff")
     
-    writeTIFF(a, paste0(outDir,id,".tiff"), bits.per.sample = 16)
+    writeTIFF(a, paste0(outDir,id), bits.per.sample = 16)
     
   },error=function(e) print(xi$URL[1]))
   
