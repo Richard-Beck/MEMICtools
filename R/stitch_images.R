@@ -59,6 +59,20 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
     
     writeTIFF(a, paste0(outDir,id), bits.per.sample = 16)
     
+    normalize_image <- function(image) {
+      # Identify the minimum and maximum pixel values
+      min_val <- min(image)
+      max_val <- max(image)
+      
+      # Apply linear normalization to stretch pixel values
+      normalized_image <- (image - min_val) / (max_val - min_val)
+      
+      return(normalized_image)
+    }
+    
+    c1 <- normalize_image(c1)
+    c2 <- normalize_image(c2)
+    
     R <- c2
     G <- matrix(pmin(1,c1 + c2),nrow = nrow(c2))
     B <- c2
