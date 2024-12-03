@@ -20,9 +20,11 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
     flattenedDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/flattenedImages2/"
     outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalImages/"
     pngDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalPNGImages/"
+    objectsDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/objectImages/"
     nxy <- 2160
     empty_image <- matrix(0,nxy,nxy)
     ff <- list.files(flattenedDir)
+    fobj <- list.files(objectsDir)
     xi <- xi[order(xi$PositionX,-xi$PositionY),]
     c1 <- xi[xi$Channel==1,]
     c1 <- split(c1,f=c1$PositionX)
@@ -59,6 +61,24 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
     
     writeTIFF(a, paste0(outDir,id), bits.per.sample = 16)
     
+    ##
+    c3 <- xi[xi$Channel==2,]
+    c3 <- split(c3,f=c3$PositionX)
+    
+    c3 <- lapply(c3,function(ci){
+      c3Col <- lapply(1:nrow(ci),function(i){
+        id <- paste0("r",stringr::str_pad(ci$Row[i],2,pad=0),
+                     "c",stringr::str_pad(ci$Col[i],2,pad=0),
+                     "f",stringr::str_pad(ci$Field[i],2,pad=0),
+                     "t",stringr::str_pad(ci$Timepoint[i],2,pad=0),
+                     ".tiff")
+        if(id%in%fobj) return(readTIFF(paste0(objectsDir,id)))
+        return(empty_image)
+      })
+      abind(c3Col,along=1)
+    })
+    c3=abind(c3,along=2)
+    
     normalize_image <- function(image) {
       # Identify the minimum and maximum pixel values
       min_val <- min(image)
@@ -73,7 +93,7 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
     c1 <- normalize_image(c1)
     c2 <- normalize_image(c2)
     
-    R <- c2
+    R <- matrix(pmin(1,c3 + c2),nrow = nrow(c2))
     G <- matrix(pmin(1,c1 + c2),nrow = nrow(c2))
     B <- c2
     
