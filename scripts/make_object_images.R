@@ -6,7 +6,7 @@ library(tiff)
 outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/objectImages/"
 dir.create(outDir)
 library(imager)
-
+x <- x[order(sapply(x,nrow))]
 lapply(x,function(xi){
   x0 <- matrix(0,nxy,nxy)
   pbapply::pbsapply(xi$`Bounding Box`,function(b){
