@@ -10,21 +10,23 @@ ncores <- 20
 cl <- makeCluster(getOption("cl.cores", ncores))
 
 dir.create("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalImages/")
+dir.create("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalPNGImages/")
 
 parLapplyLB(cl=cl,X=x,fun=function(xi){
   tryCatch({
     library(tiff)
+    library(png)
     library(abind)
     flattenedDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/flattenedImages2/"
     outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalImages/"
-    
+    pngDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalPNGImages/"
     nxy <- 2160
     empty_image <- matrix(0,nxy,nxy)
     ff <- list.files(flattenedDir)
-    xi <- xi[order(xi$PositionX,xi$PositionY),]
+    xi <- xi[order(xi$PositionX,-xi$PositionY),]
     c1 <- xi[xi$Channel==1,]
     c1 <- split(c1,f=c1$PositionX)
-    
+   
     c1 <- lapply(c1,function(ci){
       c1Col <- lapply(ci$URL,function(path){
         mapname <- paste0(substr(path,1,9),substr(path,13,nchar(path)))
@@ -56,6 +58,16 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
                  ".tiff")
     
     writeTIFF(a, paste0(outDir,id), bits.per.sample = 16)
+    
+    R <- c2
+    G <- matrix(pmin(1,c1 + c2),nrow = nrow(c2))
+    B <- c2
+    
+    b <- array(c(R,G,B),dim=c(nrow(c1),ncol(c2),3))
+    
+    writePNG(v,paste0(pngDir,gsub(".tiff",".png",id)))
+    
+    
     
   },error=function(e) print(xi$URL[1]))
   
