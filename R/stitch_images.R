@@ -65,7 +65,7 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
     
     b <- array(c(R,G,B),dim=c(nrow(c1),ncol(c2),3))
     
-    writePNG(v,paste0(pngDir,gsub(".tiff",".png",id)))
+    writePNG(b,paste0(pngDir,gsub(".tiff",".png",id)))
     
     
     
