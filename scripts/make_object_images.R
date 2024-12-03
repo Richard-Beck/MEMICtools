@@ -9,14 +9,14 @@ library(imager)
 x <- x[order(sapply(x,nrow))]
 lapply(x,function(xi){
   x0 <- matrix(0,nxy,nxy)
-  pbapply::pbsapply(xi$`Bounding Box`,function(b){
+  for(b in xi$`Bounding Box`){
     b <- as.numeric(unlist(strsplit(substr(b,2,nchar(b)-1),split="[,]")))
     v1 <- b[1]:b[3]
     v2 <- b[2]:b[4]
     bcoords <- rbind(cbind(c(v1,v1),c(rep(b[2],length(v1)),rep(b[4],length(v1)))),
                      cbind(c(rep(b[1],length(v2)),rep(b[3],length(v2))),c(v2,v2)))
     x0[bcoords] <- .8
-  })
+  }
   print(sum(x0))
   
   
