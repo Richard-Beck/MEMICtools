@@ -15,7 +15,7 @@ lapply(x,function(xi){
     v2 <- b[2]:b[4]
     bcoords <- rbind(cbind(c(v1,v1),c(rep(b[2],length(v1)),rep(b[4],length(v1)))),
                      cbind(c(rep(b[1],length(v2)),rep(b[3],length(v2))),c(v2,v2)))
-    x0[bcoords] <- .8
+    x0[bcoords] <- 1
   }
   print(sum(x0))
   
@@ -26,7 +26,7 @@ lapply(x,function(xi){
                "t",stringr::str_pad(xi$Timepoint[1],2,pad=0),
                ".tiff")
   
-  writeTIFF(x0,paste0(outDir,id))
+  writeTIFF(x0,paste0(outDir,id),bits.per.sample = 16)
 })
 
 
