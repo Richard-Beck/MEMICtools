@@ -1,4 +1,5 @@
 x <- readRDS("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/trial_objects.Rds")
+#x <- readRDS("~/projects/017_jax/MEMICtools/data/trial_objects.Rds")
 nxy <- 2160
 
 x <- split(x,f=x$Field)
@@ -13,8 +14,8 @@ lapply(x,function(xi){
     b <- as.numeric(unlist(strsplit(substr(b,2,nchar(b)-1),split="[,]")))
     v1 <- b[1]:b[3]
     v2 <- b[2]:b[4]
-    bcoords <- rbind(cbind(c(rep(b[1],length(v2)),rep(b[3],length(v2))),c(v2,v2)),
-                     cbind(c(v1,v1),c(rep(b[2],length(v1)),rep(b[4],length(v1)))))
+    bcoords <- rbind(cbind(c(v1,v1),c(rep(b[2],length(v1)),rep(b[4],length(v1)))),
+                     -cbind(c(rep(b[1],length(v2)),rep(b[3],length(v2))),c(v2,v2)))
     x0[bcoords] <- 1
   }
   print(sum(x0))
