@@ -1,5 +1,5 @@
 x <- readRDS("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/Images/metadata.Rds")
-library(tiff)
+
 library(parallel)
 
 ncores <- 40
@@ -9,6 +9,7 @@ x <- split(x,f=interaction(x$Row,x$Col,x$Channel,x$Timepoint))
 cl <- makeCluster(getOption("cl.cores", ncores))
 
 parLapplyLB(cl=cl,X=x,fun=function(xi){
+  library(tiff)
   tryCatch({
     dxy <- 0.001217608
     nxy <- 2160  
