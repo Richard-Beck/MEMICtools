@@ -6,7 +6,6 @@ x <- split(x,f=x$Field)
 library(tiff)
 outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/objectImages/"
 dir.create(outDir)
-library(imager)
 x <- x[order(sapply(x,nrow))]
 lapply(x,function(xi){
   x0 <- matrix(0,nxy,nxy)
@@ -15,7 +14,7 @@ lapply(x,function(xi){
     v1 <- b[1]:b[3]
     v2 <- b[2]:b[4]
     bcoords <- rbind(cbind(c(v1,v1),c(rep(b[2],length(v1)),rep(b[4],length(v1)))),
-                     -cbind(c(rep(b[1],length(v2)),rep(b[3],length(v2))),c(v2,v2)))
+                     nxy-cbind(c(rep(b[1],length(v2)),rep(b[3],length(v2))),c(v2,v2)))
     x0[bcoords] <- 1
   }
   print(sum(x0))
