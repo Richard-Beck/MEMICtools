@@ -31,11 +31,11 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
         if(mapname%in%ff) return(readTIFF(paste0(flattenedDir,mapname)))
         return(empty_image)
       })
-      abind(c1Col,along=2)
+      abind(c1Col,along=1)
     })
-    c1=abind(c1,along=1)
+    c1=abind(c1,along=2)
     
-    c2 <- xi[xi$Channel==1,]
+    c2 <- xi[xi$Channel==2,]
     c2 <- split(c2,f=c2$PositionX)
     
     c2 <- lapply(c2,function(ci){
@@ -44,9 +44,9 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
         if(mapname%in%ff) return(readTIFF(paste0(flattenedDir,mapname)))
         return(empty_image)
       })
-      abind(c2Col,along=2)
+      abind(c2Col,along=1)
     })
-    c2=abind(c2,along=1)
+    c2=abind(c2,along=2)
     
     a <- array(c(c1,c2),dim = c(nrow(c1), ncol(c2), 2))
     
