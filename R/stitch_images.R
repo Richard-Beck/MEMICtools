@@ -6,8 +6,6 @@ library(parallel)
 x <- x[x$Plane==1,]
 x <- split(x,f=interaction(x$Row,x$Col,x$Timepoint))
 
-
-x <- split(x,f=interaction(x$Row,x$Col,x$Channel,x$Timepoint,x$Field))
 ncores <- 20
 cl <- makeCluster(getOption("cl.cores", ncores))
 
