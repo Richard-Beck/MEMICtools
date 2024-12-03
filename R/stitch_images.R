@@ -14,48 +14,51 @@ cl <- makeCluster(getOption("cl.cores", ncores))
 dir.create("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalImages/")
 
 parLapplyLB(cl=cl,X=x,fun=function(xi){
-  library(tiff)
-  library(abind)
-  flattenedDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/flattenedImages2/"
-  outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalImages/"
-  
-  nxy <- 2160
-  empty_image <- matrix(0,nxy,nxy)
-  ff <- list.files(flattenedDir)
-  xi <- xi[order(xi$PositionX,xi$PositionY),]
-  c1 <- xi[xi$Channel==1,]
-  c1 <- split(c1,f=c1$PositionX)
-  
-  c1 <- lapply(c1,function(ci){
-    c1Col <- lapply(ci$URL,function(path){
-      mapname <- paste0(substr(path,1,9),substr(path,13,nchar(path)))
-      if(mapname%in%ff) return(readTIFF(paste0(flattenedDir,mapname)))
-      return(empty_image)
+  tryCatch({
+    library(tiff)
+    library(abind)
+    flattenedDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/flattenedImages2/"
+    outDir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/finalImages/"
+    
+    nxy <- 2160
+    empty_image <- matrix(0,nxy,nxy)
+    ff <- list.files(flattenedDir)
+    xi <- xi[order(xi$PositionX,xi$PositionY),]
+    c1 <- xi[xi$Channel==1,]
+    c1 <- split(c1,f=c1$PositionX)
+    
+    c1 <- lapply(c1,function(ci){
+      c1Col <- lapply(ci$URL,function(path){
+        mapname <- paste0(substr(path,1,9),substr(path,13,nchar(path)))
+        if(mapname%in%ff) return(readTIFF(paste0(flattenedDir,mapname)))
+        return(empty_image)
+      })
+      abind(c1Col,along=2)
     })
-    abind(c1Col,along=2)
-  })
-  c1=abind(c1,along=2)
-  
-  c2 <- xi[xi$Channel==1,]
-  c2 <- split(c2,f=c2$PositionX)
-  
-  c2 <- lapply(c2,function(ci){
-    c2Col <- lapply(ci$URL,function(path){
-      mapname <- paste0(substr(path,1,9),substr(path,13,nchar(path)))
-      if(mapname%in%ff) return(readTIFF(paste0(flattenedDir,mapname)))
-      return(empty_image)
+    c1=abind(c1,along=1)
+    
+    c2 <- xi[xi$Channel==1,]
+    c2 <- split(c2,f=c2$PositionX)
+    
+    c2 <- lapply(c2,function(ci){
+      c2Col <- lapply(ci$URL,function(path){
+        mapname <- paste0(substr(path,1,9),substr(path,13,nchar(path)))
+        if(mapname%in%ff) return(readTIFF(paste0(flattenedDir,mapname)))
+        return(empty_image)
+      })
+      abind(c2Col,along=2)
     })
-    abind(c2Col,along=2)
-  })
-  c2=abind(c2,along=2)
-  
-  a <- array(c(c1,c2),dim = c(nrow(c1), ncol(c2), 2))
-  
-  id <- paste0("r",stringr::str_pad(xi$Row[1],2,pad=0),
-               "c",stringr::str_pad(xi$Col[1],2,pad=0),
-               "t",stringr::str_pad(xi$Timepoint[1],2,pad=0),
-               ".tiff")
-  
-  writeTIFF(a, paste0(outDir,id,".tiff"), bits.per.sample = 16)
+    c2=abind(c2,along=1)
+    
+    a <- array(c(c1,c2),dim = c(nrow(c1), ncol(c2), 2))
+    
+    id <- paste0("r",stringr::str_pad(xi$Row[1],2,pad=0),
+                 "c",stringr::str_pad(xi$Col[1],2,pad=0),
+                 "t",stringr::str_pad(xi$Timepoint[1],2,pad=0),
+                 ".tiff")
+    
+    writeTIFF(a, paste0(outDir,id,".tiff"), bits.per.sample = 16)
+    
+  },error=function(e) print(xi$URL[1]))
   
 })
