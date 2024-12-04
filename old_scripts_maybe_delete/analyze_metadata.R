@@ -1,5 +1,5 @@
 x <- readRDS("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/Images/metadata.Rds")
-
+#x <- readRDS("~/projects/017_jax/MEMICtools/data/metadata.Rds")
 library(parallel)
 
 ncores <- 40
@@ -40,7 +40,6 @@ parLapplyLB(cl=cl,X=x,fun=function(xi){
     
     m <- reshape2::acast(im,-PositionY~PositionX,value.var = "plane")
     writeTIFF(m/8,paste0("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/sliceIms2/",id))
-    
     saveRDS(m,paste0("/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/sliceMaps2/",gsub(".tiff",".Rds",id)))
     return(0)
   },error=function(e) print(xi$URL[1]))
