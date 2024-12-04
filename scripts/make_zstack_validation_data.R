@@ -6,7 +6,7 @@ output_dir <- "processed_images/zstack_validation/"
 dir.create(output_dir,recursive = T)
 input_dir <- "raw_images/"
 
-x <- readRDS("metadata.Rds")
+x <- readRDS("processed_images/metadata.Rds")
 x <- x[x$Channel==2,]
 x <- split(x,f=interaction(x$Row,x$Col))
 
