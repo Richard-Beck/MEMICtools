@@ -37,7 +37,7 @@ training <- do.call(rbind,lapply(1:images_per_set,function(i){
   x <- array(c(R,G,B),dim=c(nrow(ch1),ncol(ch2),3))
   
   #x <- abind(ch1,ch2,along = 3)
-  writeTIFF(x,paste0(output_dir,"train",i,".tiff"),bits.per.sample = 16)
+  writeTIFF(x,paste0(train_dir,"train",i,".tiff"),bits.per.sample = 16)
   data.frame(URL=fi,input_dir,xmin,ymin,dimROI=image_size)
   }))
 
@@ -66,7 +66,7 @@ test <- do.call(rbind,lapply(1:images_per_set,function(i){
   x <- array(c(R,G,B),dim=c(nrow(ch1),ncol(ch2),3))
   
   #x <- abind(ch1,ch2,along = 3)
-  writeTIFF(x,paste0(output_dir,"train",i,".tiff"),bits.per.sample = 16)
+  writeTIFF(x,paste0(test_dir,"train",i,".tiff"),bits.per.sample = 16)
   data.frame(URL=fi,input_dir,xmin,ymin,dimROI=image_size)
 }))
 
