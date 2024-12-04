@@ -17,8 +17,8 @@ zstack_map_dir <- "processed_images/zstack_maps/"
 zstack_im_dir <- "processed_images/zstack_ims/"
 flattened_image_dir <- "processed_images/flattened_images/"
 bounding_box_dir <- "processed_images/bounding_boxes/"
-png_out_dir <- "processed_images/final_rgb"
-tiff_out_dir <- "processed_images/final_tiff"
+png_out_dir <- "processed_images/final_rgb/"
+tiff_out_dir <- "processed_images/final_tiff/"
 
 for(d in c(zstack_map_dir,zstack_im_dir,flattened_image_dir,bounding_box_dir,
            png_out_dir,tiff_out_dir)) dir.create(d,recursive = TRUE)
