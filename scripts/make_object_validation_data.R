@@ -30,7 +30,7 @@ training <- lapply(1:images_per_set,function(dummyVar){
   x <- abind(ch1,ch2,along = 3)
   })
 
-training <- abind(training,along=4)
+training <- abind(training,along=3)
 writeTIFF(training,paste0(output_dir,"training.tiff"),bits.per.sample = 16)
 
 
