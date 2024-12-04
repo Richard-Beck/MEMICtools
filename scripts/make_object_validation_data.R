@@ -11,7 +11,7 @@ ff <- list.files(input_dir)
 images_per_set <- 30
 image_size <- 100
 
-training <- lapply(1:images_per_set,function(dummyVar){
+training <- lapply(1:images_per_set,function(i){
   fi <- sample(ff,1)
   ch1 <- gsub("ch2","ch1",fi)
   ch2 <- gsub("ch1","ch2",fi)
@@ -28,10 +28,9 @@ training <- lapply(1:images_per_set,function(dummyVar){
   ch2 <- ch2[xmin:xmax,ymin:ymax]
   
   x <- abind(ch1,ch2,along = 3)
+  writeTIFF(x,paste0(output_dir,"train",i,".tiff"),bits.per.sample = 16)
   })
 
-training <- abind(training,along=3)
-writeTIFF(training,paste0(output_dir,"training.tiff"),bits.per.sample = 16)
 
 
 
