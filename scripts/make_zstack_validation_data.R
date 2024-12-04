@@ -27,6 +27,9 @@ lapply(x,function(xi){
   saveAs <- paste0(output_dir,"r",x1$Row[1],"c",x1$Col[1],"f",x1$Field[1],"t",x1$Timepoint[1],".tiff")
   image_write(multichannel_image, path = saveAs, format = "tiff")
   
+  rm(processed_images, multichannel_image)
+  gc()
+  
   x1 <- xi[xi$Timepoint==10,]
   fields <- unique(x1$Field)
   x1 <- x1[x1$Field==sample(fields,1),]
@@ -43,7 +46,8 @@ lapply(x,function(xi){
   multichannel_image <- image_join(processed_images)
   saveAs <- paste0(output_dir,"r",x1$Row[1],"c",x1$Col[1],"f",x1$Field[1],"t",x1$Timepoint[1],".tiff")
   image_write(multichannel_image, path = saveAs, format = "tiff")
-  
+  rm(processed_images, multichannel_image)
+  gc()
 })
 
 
