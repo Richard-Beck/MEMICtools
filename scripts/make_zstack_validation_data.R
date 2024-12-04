@@ -1,4 +1,4 @@
-
+library(magick)
 base_dir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/"
 setwd(base_dir)
 
