@@ -9,7 +9,7 @@ dir.create(output_dir,recursive = T)
 
 ff <- list.files(input_dir)
 images_per_set <- 30
-image_size <- 100
+image_size <- 200
 
 training <- lapply(1:images_per_set,function(i){
   fi <- sample(ff,1)
@@ -27,7 +27,13 @@ training <- lapply(1:images_per_set,function(i){
   ch1 <- ch1[xmin:xmax,ymin:ymax]
   ch2 <- ch2[xmin:xmax,ymin:ymax]
   
-  x <- abind(ch1,ch2,along = 3)
+  R <- ch2
+  G <- matrix(pmin(1,ch1 + ch2),nrow = nrow(ch2))
+  B <- ch2
+  
+  x <- array(c(R,G,B),dim=c(nrow(ch1),ncol(ch2),3))
+  
+  #x <- abind(ch1,ch2,along = 3)
   writeTIFF(x,paste0(output_dir,"train",i,".tiff"),bits.per.sample = 16)
   })
 
