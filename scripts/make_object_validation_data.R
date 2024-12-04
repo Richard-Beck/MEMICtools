@@ -4,7 +4,7 @@ base_dir <- "/mnt/andor_lab/Jackson/Jackson_Operaphenix/240717_SUM159_MEMIC/"
 setwd(base_dir)
 
 input_dir <- "processed_images/flattened_images/"
-output_dir <- "processed_images/zstack_validation/"
+output_dir <- "processed_images/object_validation/"
 dir.create(output_dir,recursive = T)
 
 ff <- list.files(input_dir)
@@ -30,7 +30,7 @@ training <- lapply(1:images_per_set,function(dummyVar){
   x <- abind(ch1,ch2,along = 3)
   })
 
-training <- abind(training(along=4))
+training <- abind(training,along=4)
 writeTIFF(training,paste0(output_dir,"training.tiff"),bits.per.sample = 16)
 
 
