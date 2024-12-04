@@ -24,7 +24,7 @@ lapply(x,function(xi){
     return(image)
   })
   multichannel_image <- image_join(processed_images)
-  saveAs <- paste0(output_dir,"r",xi$Row,"c",xi$Col,"f",xi$Field,"t",xi$Timepoint,".tiff")
+  saveAs <- paste0(output_dir,"r",x1$Row[1],"c",x1$Col[1],"f",x1$Field[1],"t",x1$Timepoint[1],".tiff")
   image_write(multichannel_image, path = saveAs, format = "tiff")
   
   x1 <- xi[xi$Timepoint==10,]
@@ -41,7 +41,7 @@ lapply(x,function(xi){
     return(image)
   })
   multichannel_image <- image_join(processed_images)
-  saveAs <- paste0(output_dir,"r",xi$Row,"c",xi$Col,"f",xi$Field,"t",xi$Timepoint,".tiff")
+  saveAs <- paste0(output_dir,"r",x1$Row[1],"c",x1$Col[1],"f",x1$Field[1],"t",x1$Timepoint[1],".tiff")
   image_write(multichannel_image, path = saveAs, format = "tiff")
   
 })
