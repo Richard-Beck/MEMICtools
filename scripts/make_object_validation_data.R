@@ -9,6 +9,7 @@ test_dir <- "processed_images/object_validation/test/"
 metadata_dir <- "processed_images/object_validation/metadata/" 
 dir.create(train_dir,recursive = T)
 dir.create(test_dir,recursive = T)
+dir.create(metadata_dir,recursive = T)
 
 ff <- list.files(input_dir)
 images_per_set <- 30
